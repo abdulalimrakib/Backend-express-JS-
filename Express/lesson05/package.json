@@ -1,5 +1,5 @@
 {
-  "name": "lesson04",
+  "name": "lesson05",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -14,5 +14,9 @@
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "nodemon": "^3.0.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32"
   }
 }
