@@ -8,20 +8,22 @@
     <title>Circle</title>
 </head>
 
-<body>
+<body class="h-screen w-screen flex justify-center items-center">
     <div>
-        <ul>
-            <li><a href="/circle">Circle Area</a></li>
-            <li><a href="/rectangle">Rectangle Area</a></li>
-        </ul>
-    </div>
-    <form action="/circle" method="post">
         <div>
-            <label>Radius: </label>
-            <input type="text" name="radius" placeholder="Circle radius">
+            <ul>
+                <li><a href="/circle">Circle Area</a></li>
+                <li><a href="/rectangle">Rectangle Area</a></li>
+            </ul>
         </div>
-        <button type="submit">Calculate</button>
-    </form>
+        <form action="/circle" method="post">
+            <div>
+                <label>Radius: </label>
+                <input type="text" name="radius" placeholder="Circle radius">
+            </div>
+            <button type="submit">Calculate</button>
+        </form>
+    </div>
 </body>
 
 </html>

@@ -8,24 +8,26 @@
     <title>Rectangle</title>
 </head>
 
-<body>
+<body class="h-screen w-screen flex justify-center items-center">
     <div>
-        <ul>
-            <li><a href="/circle">Circle Area</a></li>
-            <li><a href="/rectangle">Rectangle Area</a></li>
-        </ul>
+        <div>
+            <ul>
+                <li><a href="/circle">Circle Area</a></li>
+                <li><a href="/rectangle">Rectangle Area</a></li>
+            </ul>
+        </div>
+        <form action="" method="post">
+            <div>
+                <label for="length">Length: </label>
+                <input type="text" name="length" placeholder="Rectangle Length">
+            </div>
+            <div>
+                <label for="width">Width: </label>
+                <input type="text" name="width" placeholder="Rectangle width">
+            </div>
+            <button type="submit">Calculate</button>
+        </form>
     </div>
-    <form action="" method="post">
-        <div>
-            <label for="length">Length: </label>
-            <input type="text" name="length" placeholder="Rectangle Length">
-        </div>
-        <div>
-            <label for="width">Width: </label>
-            <input type="text" name="width" placeholder="Rectangle width">
-        </div>
-        <button type="submit">Calculate</button>
-    </form>
 </body>
 
 </html>
