@@ -11,18 +11,7 @@ const DBcannect = async () => {
 };
 
 //Mongoose Schema
-const Product = new mongoose.Schema({
-  name: String,
-  price: Number,
-  description: String,
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-});
 
-// Mongoose Model
-const Products = mongoose.model("Products", Product)
 
 const PORT = 3000;
 
