@@ -84,11 +84,31 @@ app.get("/products/:id", async (req, res) => {
 });
 
 //Data Deleting
-app.delete("/products/:id", async(req, res) => {
+app.delete("/products/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const deletedProduct = await Products.deleteOne({ _id: id });
-    res.status(202).send(deletedProduct)
+    res.status(202).send(deletedProduct);
+  } catch (error) {
+    res.status(404).send({ message: error.message });
+  }
+});
+
+//Data Updating
+// $set
+app.put("/products/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deletedProduct = await Products.updateOne(
+      { _id: id },
+      {
+        $set: {
+          name: req.body.name,
+        },
+      }
+    );
+
+    res.status(202).send(deletedProduct);
   } catch (error) {
     res.status(404).send({ message: error.message });
   }
