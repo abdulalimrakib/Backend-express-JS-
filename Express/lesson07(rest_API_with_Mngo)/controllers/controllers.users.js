@@ -26,11 +26,12 @@ const getOneUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const id = req.params.id;
-    const data = await users.findOne(
+    const data = await users.updateOne(
       { _id: id },
       {
         $set: {
-            
+            name: req.body.name,
+            age: Number(req.body.age)
         },
       }
     );
@@ -45,7 +46,7 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const id = req.params.id;
-    const data = await users.findOne({ _id: id });
+    const data = await users.deleteOne({ _id: id });
     res.status(200).send(data);
   } catch (error) {
     res.status(500).send({
@@ -61,8 +62,8 @@ const createUser = async (req, res) => {
       age: req.body.age,
     });
 
-    const addedUser = newUser.save();
-    res.status(201).send(addedUser);
+    newUser.save();
+    res.status(200).send(newUser);
   } catch (error) {
     res.status(500).send({
       message: error.message,
@@ -70,4 +71,4 @@ const createUser = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers, getOneUser, createUser };
+module.exports = { getAllUsers, getOneUser, createUser, deleteUser, updateUser };
