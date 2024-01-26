@@ -1,5 +1,7 @@
 const router = require("express").Router();
-const user = require("../models/models");
+const User = require("../models/models");
+const passport = require("passport");
+require("../config/passport");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -11,51 +13,68 @@ router.get("/register", (req, res) => {
 // register : post
 router.post("/register", async (req, res) => {
   try {
-    const name = req.body.userName;
-    const email = req.body.userEmail;
-    const password = req.body.password;
+    const { name, username, password } = req.body;
 
-    const existUser = await user.findOne({ name: name });
+    const existUser = await User.findOne({ name: name });
     if (existUser) {
-      return await res.status(500).send("User name is exist");
-    } else {
-      bcrypt.hash(password, saltRounds, async (err, hash) => {
-        const newUser = await new user({
-          name,
-          email,
-          password: hash,
-        });
-        await newUser.save();
-        res.redirect("/login");
-      });
+      return res.status(500).send("User name already exists");
     }
+    const hash = await bcrypt.hash(password, saltRounds);
+    const newUser = new User({
+      name: name,
+      email: username,
+      password: hash,
+    });
+    await newUser.save();
+    res.redirect("/login");
   } catch (error) {
     res.status(500).send(error.message);
   }
 });
 
 // login : get
-router.get("/login", (req, res) => {
+const stilLogedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    res.redirect("/profile");
+  }
+  next();
+};
+
+router.get("/login", stilLogedIn, (req, res) => {
   res.render("login");
 });
 
 // login : post
-router.post("/login", (req, res) => {
-  try {
-    res.status(201).send("post register");
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    successRedirect: "/profile",
+  })
+);
 
 // profile protected : get
-router.get("/profile", (req, res) => {
+const isLogedIn = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    res.redirect("/login");
+  }
+  next();
+};
+
+router.get("/profile", isLogedIn, (req, res) => {
   res.render("profile");
 });
 
 // logout route
 router.get("/logout", (req, res) => {
-  res.redirect("/");
+  try {
+    req.logout((error) => {
+      if (error) return next(error);
+      else res.redirect("/login");
+    });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 });
 
 module.exports = router;
