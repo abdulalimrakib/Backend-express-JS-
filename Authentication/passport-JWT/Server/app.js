@@ -1,5 +1,5 @@
-require("./config/database")
-require("./config/passport")
+require("./config/database");
+require("./config/passport");
 
 const express = require("express");
 const cors = require("cors");

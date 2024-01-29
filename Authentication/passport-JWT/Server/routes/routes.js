@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("../config/passport")
 
 const router = require("express").Router();
 const passport = require("passport");
@@ -41,7 +42,7 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
       expiresIn: "2 days",
     });
-    res.status(200).send({
+    res.status(201).send({
       success: true,
       message: "Successfully loggedin",
       token: "Bearer " + token,
@@ -64,24 +65,33 @@ router.post("/register", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
-      res.status(201).send("User exist");
-    } else {
-      const hash = await bcrypt.hash(req.body.password, saltRounds);
+      return res.status(201).send("User exist");
+    }
 
+    bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
         password: hash,
       });
-
-      await newUser.save();
-      res.status(200).send({
-        success: true,
-        message: "User successfully registered",
-      });
-    }
+      await newUser
+        .save()
+        .then((user) => {
+          res.status(200).send({
+            success: true,
+            user: user,
+          });
+        })
+        .catch((err) => {
+          res.status(200).send({
+            success: false,
+            message: "user not created",
+            error: err.message,
+          });
+        });
+    });
   } catch (error) {
-    res.status(404).send({
+    res.status(400).send({
       success: false,
       message: "User can't register",
       error: error.message,
